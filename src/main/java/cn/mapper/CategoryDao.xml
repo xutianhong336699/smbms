@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.dao.CategoryDao">
+
+    <resultMap id="CategoryMapper" type="Category">
+
+        <id column="cid" property="cid"></id>
+        <result column="cname" property="cname"></result>
+        <result column="pid" property="pid"></result>
+
+<!--自关联,每一级调用该方法拿到的是categoryList,里面基本项是Category，用拿到的cid作为pid继续向下查询-->
+        <collection property="categoryList" ofType="Category" column="cid" select="findCategoryByPid">
+        </collection>
+
+    </resultMap>
+
+    <select id="findCategoryByPid" resultMap="CategoryMapper">
+        select * from category
+        WHERE pid = #{pid}
+    </select>
+
+</mapper>

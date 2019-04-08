@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.dao.EmpDao">
+
+<!--   多对一,单条sql查询 , 根据员工编号 去检索员工姓名 和 员工所属部门 -->
+    <resultMap id="EmpMapper" type="Emp">
+        <id column="empno" property="empno"></id>
+        <result column="empName" property="empName"></result>
+        <association property="dept" javaType="Dept">
+            <id column="deptno" property="deptno"></id>
+            <result column="deptName" property="deptName"></result>
+        </association>
+    </resultMap>
+
+    <select id="getEmpByEmpno" resultMap="EmpMapper">
+        SELECT * FROM emp,dept
+        where dept.deptno = emp.deptno
+        and empno = #{empno}
+    </select>
+
+<!--   多对一,多条sql查询 ,根据员工编号 去检索员工姓名 和 员工所属部门  -->
+    <resultMap id="EmpMapperMutil" type="Emp">
+        <id column="empno" property="empno"></id>
+        <result column="empName" property="empName"></result>
+        <!--column：deptno ,由第一个sql语句查询得到，作为第二个sql语句的参数去查询-->
+        <association property="dept" javaType="Dept" column="deptno" select="getDeptByDeptno"></association>
+    </resultMap>
+    <!--后运行的第二个sql语句,-->
+    <select id="getDeptByDeptno" resultType="Dept">
+        select * from dept
+        where deptno = #{deptno}
+    </select>
+    <!--先运行的第一个sql语句,在emp数据表中,通过empno条件查询到对应的deptno,将deptno作为第二个sql语句的入参-->
+    <select id="getEmpByEmpnoMutil" resultMap="EmpMapperMutil">
+        select * from emp
+        where empno = #{empno}
+    </select>
+
+
+
+
+</mapper>
