@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+
+        "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<!--mybatis大配置文件 configuration-->
+
+<configuration>
+
+    <properties resource="jdbc.properties"></properties>
+    <settings>
+        <setting name="autoMappingBehavior" value="PARTIAL"/>
+    </settings>
+    <!--环境-->
+    <typeAliases>
+        <package name="cn.entity"></package>
+    </typeAliases>
+
+    <environments default="development">
+        <!--一个环境-->
+        <environment id="development">
+            <!--事务ACID Mybatis 帮我们管理事务-->
+            <transactionManager type="JDBC"/>
+            <!--数据源-->
+            <dataSource type="POOLED">
+                <!--驱动-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <!--连接字符串-->
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--关联小配置-->
+        <mapper resource="cn/mapper/UserDao.xml"/>
+        <mapper resource="cn/mapper/DeptDao.xml"/>
+        <mapper resource="cn/mapper/EmpDao.xml"/>
+        <mapper resource="cn/mapper/CategoryDao.xml"/>
+    </mappers>
+
+</configuration>

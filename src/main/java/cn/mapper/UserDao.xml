@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.dao.UserDao">
+  <resultMap id="myMapper" type="User">
+      <id column="id" property="id"></id>
+      <result column="userName" property="userName"></result>
+  </resultMap>
+    <sql id="include">userName,userpassword</sql>
+
+    <select id="findAll" resultType="User">
+        select <include refid="include"></include> from smbms_user
+    </select>
+
+    <select id="findUserById" resultType="User">
+        select <include refid="include"></include> from smbms_user
+        where id = #{id}
+    </select>
+
+    <insert id="addUser">
+        INSERT into smbms_user (<include refid="include"></include>) VALUES (#{userName},#{userpassword})
+    </insert>
+
+    <delete id="deleteUser">
+        delete from smbms_user WHERE id = #{id}
+    </delete>
+
+    <update id="updateUser">
+        UPDATE smbms_user set userpassword = #{userpassword} where id = #{id}
+    </update>
+
+    <!--封装成实体类作为参数,多条件查询-->
+    <select id="selectByCondition" resultMap="myMapper">
+        select * from smbms_user
+        where userName like concat('%',#{userName},'%')  and address like concat('%',#{address},'%')
+    </select>
+
+    <!--封装成集合作为参数,多条件查询-->
+    <select id="selectByMap" resultType="User">
+        select * from smbms_user
+        where userName like concat('%',#{userName1},'%')  and address like concat('%',#{address1},'%')
+    </select>
+
+    <!--智能标签 if+where 查询-->
+    <select id="ifTag" resultType="User">
+        SELECT * from smbms_user
+        <where>  <!--所有的if 条件都要走<注意看运行时生成的sql语句>-->
+            <if test="userName!=null">
+                and userName=#{userName}
+            </if>
+            <if test="address!=null">
+                and address=#{address}
+            </if>
+        </where>
+    </select>
+
+    <!--智能标签 choose+where 查询-->
+    <select id="chooseTag" resultType="User">
+        SELECT * from smbms_user
+        <where>       <!--<注意看运行时生成的sql语句>-->
+            <choose>  <!-- 1个choose相当于switch case 方法，只走一个when,按顺序,哪一个符合条件走哪一个，其它的不走-->
+                <when test="userName!=null">
+                    and userName=#{userName}
+                </when>
+                <when test="address!=null">
+                    and address=#{address}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <!--   <select id="chooseTag" resultType="User">
+        SELECT * from smbms_user
+        <where>
+            <choose>
+                <when test="userName!=null">
+                    and userName=#{userName}
+                </when>
+            </choose>       2个choose的话，相当于2个if,2个条件都在sql语句里面体现;
+
+            <choose>
+                <when test="address!=null">
+                    and address=#{address}
+                </when>
+            </choose>
+        </where>
+    </select>   -->
+
+    <!--智能标签 forEach 查询<数组>-->
+    <select id="forEachTag" resultType="User">
+        SELECT * from smbms_user
+        <if test="array.length>0">
+            where id IN
+            <foreach collection="array" open="(" close=")" separator="," item="uid">
+                #{uid}   <!-- 此处大括号里面的值和 item 的值相同,item的值可以随意命名  -->
+            </foreach>
+        </if>
+    </select>
+
+    <!--智能标签 forEach 查询<集合>-->
+    <select id="forEachTagList" resultType="User">
+        SELECT * from smbms_user
+        <if test="list.size>0">
+            where id IN
+            <foreach collection="list" open="(" close=")" separator="," item="uid">
+                #{uid}   <!-- 此处大括号里面的值和 item 的值相同,item的值可以随意命名  -->
+            </foreach>
+        </if>
+    </select>
+
+    <!--智能标签 forEach 查询<集合,强类型>-->
+    <select id="forEachTagListUser" resultType="User">
+        SELECT * from smbms_user
+        <if test="list.size>0">
+            where id IN
+            <foreach collection="list" open="(" close=")" separator="," item="user">
+                #{user.id}   <!-- 此处大括号里面的值和 item 的值相同,item的值可以随意命名  -->
+            </foreach>
+        </if>
+    </select>
+</mapper>
