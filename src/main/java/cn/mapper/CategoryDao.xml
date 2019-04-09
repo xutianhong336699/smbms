@@ -9,7 +9,6 @@
 <mapper namespace="cn.dao.CategoryDao">
 
     <resultMap id="CategoryMapper" type="Category">
-
         <id column="cid" property="cid"></id>
         <result column="cname" property="cname"></result>
         <result column="pid" property="pid"></result>
@@ -17,12 +16,23 @@
 <!--自关联,每一级调用该方法拿到的是categoryList,里面基本项是Category，用拿到的cid作为pid继续向下查询-->
         <collection property="categoryList" ofType="Category" column="cid" select="findCategoryByPid">
         </collection>
-
     </resultMap>
 
     <select id="findCategoryByPid" resultMap="CategoryMapper">
         select * from category
         WHERE pid = #{pid}
+    </select>
+
+
+    <resultMap id="CategoryMapperMany" type="Category">
+        <id column="cid" property="cid"></id>
+        <result column="cname" property="cname"></result>
+        <result column="pid" property="pid"></result>
+        <association property="parent" javaType="Category" column="pid" select="findCategoryByCid"></association>
+    </resultMap>
+    <select id="findCategoryByCid" resultMap="CategoryMapperMany">
+        SELECT * FROM category
+        WHERE cid=#{cid}
     </select>
 
 </mapper>

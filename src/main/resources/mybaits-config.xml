@@ -42,6 +42,7 @@
         <mapper resource="cn/mapper/DeptDao.xml"/>
         <mapper resource="cn/mapper/EmpDao.xml"/>
         <mapper resource="cn/mapper/CategoryDao.xml"/>
+        <mapper resource="cn/mapper/StudentDao.xml"/>
     </mappers>
 
 </configuration>
