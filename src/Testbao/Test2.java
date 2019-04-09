@@ -65,7 +65,7 @@ public class Test2 {
         }
     }
 
-    @Test  /*   自关联查询,< N:1  父级菜单列表应用 >   */
+    @Test  /*   自关联查询,   < N:1  父级菜单列表应用 >   */
     public void test6() throws Exception{
         SqlSession sqlSession =  MybatisUtil.getSession();
         CategoryDao dao = sqlSession.getMapper(CategoryDao.class);
@@ -136,7 +136,7 @@ public class Test2 {
         }
     }
 
-    @Test /* 二级缓存 */
+    @Test /* 二级缓存    命中率=(n-1)/n   n:sqlSession关闭的次数   */
     public void test10() throws Exception{
         SqlSession sqlSession1 = MybatisUtil.getSession();
         UserDao dao1 = sqlSession1.getMapper(UserDao.class);
