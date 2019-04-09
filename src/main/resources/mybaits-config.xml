@@ -12,7 +12,13 @@
 
     <properties resource="jdbc.properties"></properties>
     <settings>
+        <!--自动映射行为设置  给mapper用的，关联对象或单个对象-->
         <setting name="autoMappingBehavior" value="PARTIAL"/>
+        <!--延迟加载设置-->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+        <setting name="aggressiveLazyLoading" value="true"></setting>
+        <!--开启全局的二级缓存-->
+        <setting name="cacheEnabled" value="true"></setting>
     </settings>
     <!--环境-->
     <typeAliases>

@@ -28,4 +28,8 @@ public class MybatisUtil {
         //静态方法中不能直接访问非静态成员
         return factory.openSession();
     }
+
+    public static void closeSession(SqlSession sqlSession){
+        sqlSession.close();
+    }
 }

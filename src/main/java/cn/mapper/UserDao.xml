@@ -7,6 +7,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.dao.UserDao">
+    <!-- 添加cache 节点-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
+
   <resultMap id="myMapper" type="User">
       <id column="id" property="id"></id>
       <result column="userName" property="userName"></result>

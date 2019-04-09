@@ -1,0 +1,47 @@
+
+1:延迟加载,< 针对多条sql语句查询,实例在 CategoryDao 里面 >
+
+<setting name="lazyLoadingEnabled" value="false"/>
+无论是否调用主对象属性，都打印2条SQL
+
+<setting name="lazyLoadingEnabled" value="true"/>
+调用主对象属性，打印2条SQL
+不调用主对象属性，打印1条SQL
+
+(1)<setting name="lazyLoadingEnabled" value="false"/>
+    结论：(1)设置为false的话(<2>设置无论怎么设置不管用，都打印2条sql),下面的(2)无论设置成true或者false,
+            无论是否调用主对象属性,都打印2条sql
+(2)<setting name="aggressiveLazyLoading" value="false"></setting>
+
+
+(1)<setting name="lazyLoadingEnabled" value="true"/>
+(2)<setting name="aggressiveLazyLoading" value="false"></setting>
+    结论：(1)设置为true的话:
+            下面的(2)设置成false时,不调用主对象属性，打印1条SQL,调用主对象属性，打印2条SQL
+            下面的(2)设置成true时,不调用主对象属性，打印1条SQL,调用主对象属性，打印2条SQL
+
+
+2:mybatis 缓存
+     查询缓存的使用，主要是为了提高查询访问速度。将用户对同一数据的重复查询过程简化，不再每次均从数据库查询获取结果数据，从而提高访问速度。缓存之前，实体类必须序列化实现 Serializable 接口
+
+    (一) 一级缓存存在性的证明 <一级缓存默认是开始的>
+        增删改对一级缓存的影响 ------> 一级缓存失效;
+        如何开启二级缓存,二级缓存在Mybatis默认是开启（全局配置的某个属性值为true）的，
+        但是开始和能直接使用时两码事。cacheEnabled=true，默认值为true
+        <setting name="cacheEnabled" value="true"></setting>
+
+    (二)第三方缓存插件 EhCache 配置3步骤
+        (1) 导入两个依赖
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>2.10.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.caches</groupId>
+                <artifactId>mybatis-ehcache</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+        (2) resources 里面配置 ehcache.xml
+        (3) 小配置文件里面添加 cache 标签 < 实例在 UserDao.xml >
+            <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
