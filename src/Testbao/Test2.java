@@ -1,9 +1,11 @@
 import cn.dao.CategoryDao;
 import cn.dao.DeptDao;
 import cn.dao.EmpDao;
+import cn.dao.StudentDao;
 import cn.entity.Category;
 import cn.entity.Dept;
 import cn.entity.Emp;
+import cn.entity.Student;
 import cn.utils.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
@@ -59,13 +61,33 @@ public class Test2 {
     }
 
 
-    @Test  /*   自关联查询,< 多级菜单列表应用 >   */
+    @Test  /*   自关联查询,< 1：N  多级菜单列表应用 >   */
     public void test5() throws Exception{
         SqlSession sqlSession =  MybatisUtil.getSession();
         CategoryDao dao = sqlSession.getMapper(CategoryDao.class);
         List <Category> list = dao.findCategoryByPid(0);
         for (Category category:list) {
             System.out.println(category);
+        }
+    }
+
+    @Test  /*   自关联查询,< N:1  父级菜单列表应用 >   */
+    public void test6() throws Exception{
+        SqlSession sqlSession =  MybatisUtil.getSession();
+        CategoryDao dao = sqlSession.getMapper(CategoryDao.class);
+        List <Category> categoryList = dao.findCategoryByCid(5);
+        for (Category category:categoryList) {
+            System.out.println(category);
+        }
+    }
+
+    @Test  /*   多对多查询    */
+    public void test7() throws Exception{
+        SqlSession sqlSession =  MybatisUtil.getSession();
+        StudentDao dao = sqlSession.getMapper(StudentDao.class);
+        List <Student> studentList = dao.findStudentByTid(1);
+        for (Student stu:studentList) {
+            System.out.println(stu);
         }
     }
 
