@@ -144,11 +144,11 @@ public class Test2 {
         for (User item:list1) {
             System.out.println(item.getUserName());
         }
-        MybatisUtil.closeSession(sqlSession1);
+        MybatisUtil.closeSession(sqlSession1); // 关闭一级缓存后,一级缓存内清空,只在二级缓存内存在
 
         System.out.println("-----------------------");
 
-        SqlSession sqlSession2 = MybatisUtil.getSession();
+        SqlSession sqlSession2 = MybatisUtil.getSession(); // 直接从二级缓存里面拿，不用再执行sql语句去连接数据库拿数据
         UserDao dao2 = sqlSession2.getMapper(UserDao.class);
         List <User> list2 = dao2.findAll();
         for (User item:list2) {
